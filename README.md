@@ -1,4 +1,9 @@
 # ShadowProject
+Connected repositories:
+* [SpAFormer with my changes](https://github.com/jancuz/SpA-Former-shadow-removal.git)
+* [MTMT-net with my changes](https://github.com/jancuz/MTMT.git)
+* [RobustBench](https://github.com/RobustBench/robustbench.git)
+  
 ## Description
 
 * What do you know about shadows?
@@ -80,7 +85,7 @@ val_shadow_confidence_plot(shadow_path='path_to_image_shadow_txt', model_name='L
 ```
 and then run the script ```robust_model_prediction_shadow_visualization.py``` using ```python robust_model_prediction_shadow_visualization.py```
 
-Here you can see the result of correlation btw. shadow amount and prediction confidence for correctly classified samples and misclassifications on val. dataset ImageNet for the ```Liu2023Comprehensive_Swin-L``` model from robustbench.
+Here you can see the result of the correlation btw. shadow amount and prediction confidence for correctly classified samples and misclassifications on val. dataset ImageNet for the ```Liu2023Comprehensive_Swin-L``` model from robustbench.
 
 <p align="center"><img src="imgs/Liu2023Comprehensive_Swin-L shadow prediction confidence.png" width="700">
 
@@ -89,6 +94,12 @@ In the same way, you can get different visualizations for different models from 
 ### SpA-Former
 
 ## Results
+Shadows may actually help in object recognition!
+* correct predictions with more shadow information are more confident
+* misclassification with more shadow information are less confident
+* looking through the graph with the number of predictions (correct/incorrect) and the shadow amount, we can see that the shadow amount from 0% to 50% increases the chances of the correct prediction (the number of correct predictions is higher than the number of misclassification)
 
-## Used Works
+Also, some interesting stuff noticed:
+* when the shadow amount is more than 80%, the confidence of the model tends to fluctuate, and it seems like a lot of shadow information (>80%) reduces model confidence for the right prediction and increases the chances for misclassification
+* and all described observations are true for both robust models (more robust and less robust models)
 
