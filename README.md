@@ -45,7 +45,7 @@ BER was calculated for the different datasets and two models: [SpAFormer](https:
 #### Shadow amount calculation and visualization
 To calculate the shadow amount with [MTMT-net](https://github.com/jancuz/MTMT.git) on ImageNet val. dataset:
 * Place ImageNet val. dataset into the folder ```data```
-* Download the MTMT-net model from the [google-disc] and place it into the folder ```models```
+* Download the MTMT-net model from the [Google Drive](https://drive.google.com/file/d/1s-4BSmz9j8u2_WoUnzNYL0QjRYFEeEkU/view?usp=share_link) and place it into the folder ```models```
 * Run the ```test_MT.py``` with the specified path to the data and model:
 
 ```
@@ -72,7 +72,7 @@ For the ImageNet val. dataset shadow amount was calculated and visualized:
 #### Correlation analysis btw. shadow amount and prediction confidence of the robust models
 The models used to predict the object class were used from the [RobustBench](https://robustbench.github.io/#div_imagenet_Linf_heading). In order to use the robustbench models follow the instruction [here](https://github.com/RobustBench/robustbench#model-zoo-quick-tour) to install the robustbench.
 
-The robustbench is limited to the number of test images (<=5000 images) for the ImageNet dataset. To do the model evaluation on the whole validation dataset (50.000 images) download ```imagenet_test_image_ids_all_classes.txt``` from [google-disk](), upload this file into the ```helper_files``` folder, and change the ```loaders.py``` file line 70:
+The robustbench is limited to the number of test images (<=5000 images) for the ImageNet dataset. To do the model evaluation on the whole validation dataset (50.000 images) download ```imagenet_test_image_ids_all_classes.txt``` from [Google Drive](), upload this file into the ```helper_files``` folder, and change the ```loaders.py``` file line 70:
 ```
         samples = make_custom_dataset(
             self.root, 'helper_files/imagenet_test_image_ids_all_classes.txt',
@@ -81,15 +81,19 @@ The robustbench is limited to the number of test images (<=5000 images) for the 
 
 The correlation analysis can be done by running the file ```robust_model_prediction_shadow_visualization.py``` in folder ```object_recognition_models```. To plot different graphs use the specified method with the specified arguments in the main path of the script ```robust_model_prediction_shadow_visualization.py```, for example:
 ```
-val_shadow_confidence_plot(shadow_path='path_to_image_shadow_txt', model_name='Liu2023Comprehensive_Swin-L')
+val_shadow_confidence_scatter_bar_sns(n_examples, shadow_path, model_name, 
+                                          dataset, threat_model, 
+                                          x_test_path, y_test_path, paths_test_path)
 ```
 and then run the script ```robust_model_prediction_shadow_visualization.py``` using ```python robust_model_prediction_shadow_visualization.py```
 
 Here you can see the result of the correlation btw. shadow amount and prediction confidence for correctly classified samples and misclassifications on val. dataset ImageNet for the ```Liu2023Comprehensive_Swin-L``` model from robustbench.
 
-<p align="center"><img src="imgs/Liu2023Comprehensive_Swin-L shadow prediction confidence.png" width="700">
+<p align="center"><img src="imgs/SA and PC scatter+bar Liu.png">
 
-In the same way, you can get different visualizations for different models from robustbench.
+In the same way, you can get different visualizations for different models from robustbench, for example for the ```Salman2020Do_R50``` model from robustbench:
+
+<p align="center"><img src="imgs/SA and PC scatter+bar Salman.png">
 
 ### SpA-Former
 
