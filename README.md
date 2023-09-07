@@ -21,13 +21,13 @@ Here you can find interesting results in analyzing the role of the shadow compon
 
 ## Shadow detection on ImageNet val. dataset
 
-On [google-disk], you can find:
-* the SpAFormer model
-* the MTMT-net model
-* the results of shadow detection with [SpAFormer](https://github.com/jancuz/SpA-Former-shadow-removal.git) on ImageNet val. dataset
-* the results of shadow detection with [MTMT-net](https://github.com/jancuz/MTMT.git) on ImageNet val. dataset
-* result of calculation of shadow amount with MTMT-net (image_shadow.txt)
-* test data for robustbench (imagenet_test_image_ids_all_classes.txt)
+On [Google Drive](https://drive.google.com/drive/folders/1hpkSIUA4vYmO3LD0DaDsIHPFwOn18ejT?usp=drive_link), you can find:
+* [SpAFormer models](https://drive.google.com/drive/folders/1W0GyprYYTyuL1UN2Oi6wl8_7Mqph1f7c?usp=drive_link)
+* [MTMT-net model](https://drive.google.com/file/d/1mVA89ck0TDBHNY2QopWBTcJZrYvvsxxQ/view?usp=drive_link)
+* [results of shadow detection](https://drive.google.com/drive/folders/1W0GyprYYTyuL1UN2Oi6wl8_7Mqph1f7c?usp=drive_link) with [SpAFormer](https://github.com/jancuz/SpA-Former-shadow-removal.git) on ImageNet val. dataset
+* [results of shadow detection](https://drive.google.com/file/d/1jPA5_Rhg18HyzDSAzu6c-vur91KpnldX/view?usp=drive_link) with [MTMT-net](https://github.com/jancuz/MTMT.git) on ImageNet val. dataset
+* result of calculation of shadow amount with MTMT-net ([shadow_all_classes.txt](https://drive.google.com/file/d/1-ZeM3Js5Gqg5GpFYj8xtgvQffJ4hLX95/view?usp=drive_link))
+* test data for robustbench ([imagenet_test_image_ids_all_classes.txt](https://drive.google.com/file/d/1-28kgpm8lX19vaB4HdZ2YSGD555uhzU9/view?usp=drive_link), [tensors_x_y_path_imageNet_val.rar](https://drive.google.com/file/d/1-28kgpm8lX19vaB4HdZ2YSGD555uhzU9/view?usp=drive_link))
 <p align="center"><img src="imgs/SpAFormer_MTMT_res_ImageNet_val.png" width="700">
 
 ## Shadow detection evaluation - BER
@@ -42,7 +42,7 @@ BER was calculated for the different datasets and two models: [SpAFormer](https:
 
 ## Shadow amount calculation on ImageNet val. dataset and Correlation Analysis
 ### MTMT-net
-#### Shadow amount calculation and visualization
+#### 1. Shadow amount calculation and visualization
 To calculate the shadow amount with [MTMT-net](https://github.com/jancuz/MTMT.git) on ImageNet val. dataset:
 * Place ImageNet val. dataset into the folder ```data```
 * Download the MTMT-net model from the [Google Drive](https://drive.google.com/file/d/1s-4BSmz9j8u2_WoUnzNYL0QjRYFEeEkU/view?usp=share_link) and place it into the folder ```models```
@@ -69,7 +69,7 @@ For the ImageNet val. dataset shadow amount was calculated and visualized:
 * ImageNet val. dataset consists of 50.000 images
 * 7.574 images (0,15%) in ImageNet val. dataset do not have shadows at all
 
-#### Correlation analysis btw. shadow amount and prediction confidence of the robust models
+#### 2. Correlation analysis btw. shadow amount and prediction confidence of the robust models
 The models used to predict the object class were used from the [RobustBench](https://robustbench.github.io/#div_imagenet_Linf_heading). In order to use the robustbench models follow the instruction [here](https://github.com/RobustBench/robustbench#model-zoo-quick-tour) to install the robustbench.
 
 The robustbench is limited to the number of test images (<=5000 images) for the ImageNet dataset. To do the model evaluation on the whole validation dataset (50.000 images) download ```imagenet_test_image_ids_all_classes.txt``` from [Google Drive](), upload this file into the ```helper_files``` folder, and change the ```loaders.py``` file line 70:
@@ -96,6 +96,51 @@ In the same way, you can get different visualizations for different models from 
 <p align="center"><img src="imgs/SA and PC scatter+bar Salman.png">
 
 ### SpA-Former
+#### 1. SpAFormer to detect shadows
+
+##### Trained on grayscale (GS) images from ISTD, SOBA datasets
+
+* [config.yml](https://github.com/jancuz/SpA-Former-shadow-removal/blob/main/results/000009-train%20with%20GS%20test%20on%20GS%20ISTD%20part/config.yml) used for training on GS ISTD
+* [config.yml](https://github.com/jancuz/SpA-Former-shadow-removal/blob/main/results/000033-train%20on%20GS%20test%20on%20GS%20on%20SOBA%20bw%20masks/config.yml) used for training on GS SOBA
+  
+Modify the `config.yml` with the parameters used in `config.yml` files described higher and run:
+
+```bash
+python train.py
+```
+
+Here you can find [pre-trained model on GS ISTD](https://drive.google.com/file/d/1-MrP7dV4KTDt7IdJZBAkFeRv88snDV3u/view?usp=drive_link) and [pre-trained model on GS SOBA](https://drive.google.com/file/d/1-Rm6qEKhLUe30G8CMq8UH1t_e5NJkfak/view?usp=drive_link).
+
+#### 2. Test on ImageNet
+
+First, the dataset is trained on 640x480, so you should resize the test dataset, you can use the code to resize your image 
+```bash python bigresize.py```
+and then follow the code to test the results:
+```bash
+python predict.py --config <path_to_config.yml_in_the_out_dir>
+                  --test_dir <path_to_a_directory_stored_test_data>
+                  --out_dir <path_to_an_output_directory>
+                  --pretrained <path_to_a_pretrained_model> --cuda
+```
+
+Or you can use ```demo.py```
+* to make the prediction and save it,
+* to collect statistics for the model (BER calculation),
+* to calculate the shadow amount
+
+```bash
+python demo.py --root_path <path_to_data>
+               --shadow_count <True/False>
+               --GT_access <True/False - BER_calculation_if_GT_data_is_available>
+               --pretrained <path_to_a_pretrained_model>
+               --save_filepath <path_to_an_output_directory>
+               --save_shadow_info_rgb <path_to_a_txt_file_with_shadow_amount_info>
+               --save_res_imgs<True/False save_output_or_not>
+```
+
+* There are [results](https://drive.google.com/file/d/1-q4miwXtkeKPlLcY4xt4ndqI5SpJEKH8/view?usp=drive_link) on ImageNet val. dataset with model trained on GS ISTD
+* There are [results](https://drive.google.com/file/d/1-vxJZ3MygMpN4PCE_tgc1DDAlHJ5TF9O/view?usp=drive_link) on ImageNet val. dataset with model trained on GS SOBA
+
 
 ## Results
 Shadows may actually help in object recognition!
